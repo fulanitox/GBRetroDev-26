@@ -1,5 +1,4 @@
 include "../include/hardware.inc"
-include "../include/constantes.inc"
 
 SECTION "RENDER", ROM0
 
@@ -54,6 +53,10 @@ sys_render_setUp:
     call sys_render_limpiar_pantalla
     call sys_render_ActivarSpritesYPaleta
     call sys_render_cleanOAM
+
+    ld a, [rLCDC]
+    set 7, a
+    ld [rLCDC], a
     
 
 ret

@@ -1,8 +1,8 @@
 SUMMARY:
-	ROM0: 168 bytes used / 16216 free
+	ROM0: 176 bytes used / 16208 free
 
 ROM0 bank #0:
-	SECTION: $0000-$0046 ($0047 bytes) ["RENDER"]
+	SECTION: $0000-$004e ($004f bytes) ["RENDER"]
 	         $0000 = sys_render_limpiar_pantalla
 	         $0009 = sys_render_limpiar_pantalla.pintar
 	         $0009 = sys_render_limpiar_pantalla.total
@@ -10,13 +10,13 @@ ROM0 bank #0:
 	         $0025 = sys_render_cleanOAM
 	         $002c = sys_render_cleanOAM.limpiar
 	         $0032 = sys_render_setUp
-	SECTION: $0047-$004e ($0008 bytes) ["UTILS"]
-	         $0047 = wait_vblank_start
-	SECTION: $004f-$0052 ($0004 bytes) ["ESCENAS"]
-	         $004f = man_escenas_init
-	EMPTY: $0053-$00ff ($00ad bytes)
+	SECTION: $004f-$0056 ($0008 bytes) ["UTILS"]
+	         $004f = wait_vblank_start
+	SECTION: $0057-$005a ($0004 bytes) ["ESCENAS"]
+	         $0057 = man_escenas_init
+	EMPTY: $005b-$00ff ($00a5 bytes)
 	SECTION: $0100-$014f ($0050 bytes) ["Header"]
 	SECTION: $0150-$0154 ($0005 bytes) ["Entry point"]
 	         $0150 = main
 	EMPTY: $0155-$3fff ($3eab bytes)
-	TOTAL EMPTY: $3f58 bytes
+	TOTAL EMPTY: $3f50 bytes

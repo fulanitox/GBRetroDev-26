@@ -6,6 +6,6 @@
 00:0025 sys_render_cleanOAM
 00:002c sys_render_cleanOAM.limpiar
 00:0032 sys_render_setUp
-00:0047 wait_vblank_start
-00:004f man_escenas_init
+00:004f wait_vblank_start
+00:0057 man_escenas_init
 00:0150 main
