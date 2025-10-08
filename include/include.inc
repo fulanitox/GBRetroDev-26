@@ -1,0 +1,15 @@
+;;-------------------------------
+;;CONSTANTS----------------------
+
+;; MAN ENTITY ----------------
+DEF SIZEOF_E = 10
+DEF DEFAULT_CMP = $01
+DEF DEFAULT_DISABLED_CMP = $00
+DEF MAX_ENTITIES = 10
+DEF ENTITY_ARRAY_SIZE = MAX_ENTITIES * SIZEOF_E
+DEF PLAYER_TYPE = 0
+DEF SPIKE_TYPE = 1
+DEF SPRITE_PLAYER = $FF
+DEF SPRITE_SPIKE = $FF
+DEF DEFAULT_ATR = 0
+;; ------------------------------
