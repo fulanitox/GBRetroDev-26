@@ -25,7 +25,48 @@ SECTION "Entity Array", WRAM0
 
 ;;-------------------------------
 ;;ENTITY MANAGER-----------------
+;;Struct player-------------------------------------------
+struct_player:
+    DB PLAYER_TYPE
+    DB 0 ;OAM ID
+    DB SPAWN_Y ;PosX
+    DB SPAWN_X ;PosY
+    DB 0 ;PosX
+    DB 0 ;PosY
+    DB SPRITE_PLAYER
+    DB DEFAULT_ATR
+    DB 0
 
+;;Struct spike-------------------------------------------
+struct_spike:
+    DB SPIKE_TYPE
+    DB 0 ;OAM ID
+    DB 0 ;PosX
+    DB 0 ;PosY
+    DB 0 ;PosX
+    DB 0 ;PosY
+    DB SPRITE_SPIKE
+    DB DEFAULT_ATR
+    DB 0
+
+;;Posiciones pinchos------------------------------------------------
+position_spikes_left:   
+    DB $01*8+8, $02*8+16
+    DB $01*8+8, $04*8+16
+    DB $01*8+8, $06*8+16
+    DB $01*8+8, $08*8+16
+    DB $01*8+8, $0A*8+16
+    DB $01*8+8, $0C*8+16
+    DB $01*8+8, $0E*8+16
+
+position_spikes_right:   
+    DB $11*8+8, $02*8+16
+    DB $11*8+8, $04*8+16
+    DB $11*8+8, $06*8+16
+    DB $11*8+8, $08*8+16
+    DB $11*8+8, $0A*8+16
+    DB $11*8+8, $0C*8+16
+    DB $11*8+8, $0E*8+16
 SECTION "Entity Manager", ROM0
 ;;CODE
 
@@ -239,11 +280,100 @@ man_entity_update_single::
     ;;Actualizo el bucle de animación
     ld a, SIZEOF_E - 1
     .back
-    inc hl
-    dec a
+        inc hl
+        dec a
     jr nz, .back
     ld a, [hl]      ;; a -> Entity_AnimID
     inc a
     cp ANIM_DUR
-    ld a, 0
+    jr nz, .end
+        ld a, 0
+    .end
+ret
+
+
+;;-------------------------------------------------------
+;; Crea en la primera posicion libre del entity_array, la entidad spike
+;; WARNING: No lo coloca en la OAM, se debe hacer fuera
+;; INPUT: - B -> Indice de posicion (0-6)
+;; DESTROYS: AF, HL, BC, DE
+;; OUTPUT: -HL -> posición de memoria de la entidad creada
+;;
+;;
+man_entity_create_spike_left::
+    call man_entity_alloc
+    dec hl
+
+    push hl
+
+    inc hl
+
+    ld de, struct_spike
+
+    ld c, SIZEOF_E - 1
+    .loop
+        ld a, [de]
+        ld [hl+], a
+        inc de
+        dec c
+        jr nz, .loop
+
+    dec hl
+    pop hl
+ret
+
+;;-------------------------------------------------------
+;; Crea en la primera posicion libre del entity_array, la entidad spike
+;; WARNING: No lo coloca en la OAM, se debe hacer fuera
+;; DESTROYS: AF, HL, BC, DE
+;; OUTPUT: -HL -> posición de memoria de la entidad creada
+;;
+;;
+man_entity_create_spike_right::
+    call man_entity_alloc
+    dec hl
+
+    push hl
+
+    inc hl
+
+    ld de, struct_spike
+
+    ld b, SIZEOF_E - 1
+    .loop
+        ld a, [de]
+        ld [hl+], a
+        inc de
+        dec b
+        jr nz, .loop
+
+    pop hl
+ret
+
+;;-------------------------------------------------------
+;; Crea en la primera posicion libre del entity_array, la entidad spike
+;; WARNING: No lo coloca en la OAM, se debe hacer fuera
+;; DESTROYS: AF, HL, BC, DE
+;; OUTPUT: -HL -> posición de memoria de la entidad creada
+;;
+;;
+man_entity_create_player::
+    call man_entity_alloc
+    dec hl
+
+    push hl
+
+    inc hl
+
+    ld de, struct_player
+
+    ld b, SIZEOF_E - 1
+    .loop
+        ld a, [de]
+        ld [hl+], a
+        inc de
+        dec b
+        jr nz, .loop
+
+    pop hl
 ret

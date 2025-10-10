@@ -12,7 +12,9 @@ DEF SPIKE_TYPE = 1
 DEF SPRITE_PLAYER = $FF
 DEF SPRITE_SPIKE = $FF
 DEF DEFAULT_ATR = 0
-DEF ANIM_DUR = 4
+DEF ANIM_DUR = 5
+DEF SPAWN_Y = $08*8+16
+DEF SPAWN_X = $09*8+8
 ;; ------------------------------
 
 ;; SYS PHYSICS -------------------
