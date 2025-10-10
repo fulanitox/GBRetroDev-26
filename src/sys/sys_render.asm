@@ -1,6 +1,6 @@
 include "../include/hardware.inc"
 
-SECTION "RENDER", ROM0
+SECTION "Render System", ROM0
 
 sys_render_limpiar_pantalla:
     ld hl, $9800
@@ -64,7 +64,7 @@ sys_render_load_all_sprites_VRAM:
     ld de, $8000
     call sys_render_load_sprite
 ret
-sys_render_pintar_inicio:
+sys_render_pintar_menu:
     
     ld hl, $FE00
 
@@ -117,11 +117,7 @@ sys_render_pintar_inicio:
     ld [hl+], a
 ret
 sys_render_setUp:
-    call wait_vblank_start
-
-    ld a, [rLCDC]
-    res 7, a
-    ld [rLCDC], a
+    call LCDCoff
 
     call sys_render_limpiar_pantalla
     call sys_render_ActivarSpritesYPaleta
@@ -129,11 +125,5 @@ sys_render_setUp:
     
     call sys_render_load_all_sprites_VRAM
 
-    call sys_render_pintar_inicio
-
-    ld a, [rLCDC]
-    set 7, a
-    ld [rLCDC], a
-    
-
+    call LCDCon
 ret

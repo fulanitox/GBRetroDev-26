@@ -12,4 +12,9 @@ DEF SPIKE_TYPE = 1
 DEF SPRITE_PLAYER = $FF
 DEF SPRITE_SPIKE = $FF
 DEF DEFAULT_ATR = 0
+DEF ANIM_DUR = 4
 ;; ------------------------------
+
+;; SYS PHYSICS -------------------
+DEF MAX_SPEED_Y = 10
+DEF MAX_SPEED_X = 10

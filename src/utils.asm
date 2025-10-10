@@ -4,12 +4,39 @@ SECTION "INPUT VARIABLES", HRAM
     flancoAscendente:   DS 1
 
 SECTION "UTILS", ROM0
-wait_vblank_start::
+
+;;-------------------------------------------------------
+;; Espera al inicio de VBLANK
+;; DESTROYS: AF
+;;
+wait_VBLANK::
     ld a, [$FF44]
     cp 144
-    jr nz, wait_vblank_start
+    jr nz, wait_VBLANK
 ret
 
+;;-------------------------------------------------------
+;; Apaga LCDC, para la PPU
+;; DESTROYS: AF, HL
+;;
+LCDCoff::
+   ;;APAGAR LCDC
+   call wait_VBLANK
+   ld hl, $FF40
+   res 7, [hl]
+   ;;--------------
+ret
+
+;;-------------------------------------------------------
+;; Enciende LCDC, vuelve a poner en marcha la PPU
+;; DESTROYS: HL
+;;
+LCDCon::
+   ;;ENCENDER LCDC
+   ld hl, $FF40
+   set 7, [hl]
+   ;;------------
+ret
 
 utils_read_buttons:
     ld a, $20       ; 00100000, seleccionan los botones, desactiva las acciones y deja activado con 0 todo lo demás

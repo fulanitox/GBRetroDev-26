@@ -236,9 +236,14 @@ ret
 ;; - HL -> dirección de una entidad válida del entity_sarray
 ;;
 man_entity_update_single::
-    ;; Actualizamos la posición de las entidades
-    ;; Y hacemos el bucle de la anim (0,1,2,3  (vuelta))
-
-
-
+    ;;Actualizo el bucle de animación
+    ld a, SIZEOF_E - 1
+    .back
+    inc hl
+    dec a
+    jr nz, .back
+    ld a, [hl]      ;; a -> Entity_AnimID
+    inc a
+    cp ANIM_DUR
+    ld a, 0
 ret

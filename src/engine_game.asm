@@ -1,5 +1,14 @@
-SECTION "ENGINE GAME", ROM0
+SECTION "Actual scene", WRAM0
+    act_scene: DS 1 ;; 0 -> escena menú
+                    ;; 1 -> escena gameplay
 
+    do_change: DS 1 ;;Cuando sea 0 no cambiará
+                    ;;cuando sea 1 cambiará a la escena del menu
+                    ;;cuando sea 2 cambiará a la escena del juego
+
+
+
+SECTION "ENGINE GAME", ROM0
 engine_game_check_inputs:
 
     call utils_read_buttons
@@ -8,7 +17,6 @@ engine_game_check_inputs:
         ld a, [flancoAscendente]
         bit 0, a
         jr z, .checkA
-        call sys_render_cleanOAM
 
     .checkA
         ld a, [flancoAscendente]
@@ -18,5 +26,78 @@ engine_game_check_inputs:
     .anyKey
 
 
+ret
+
+;;-------------------------------------------------------
+;; Comprueba en la escena actual que este y dependiendo de 
+;; cual sea llama a su update correspondiente
+;; DESTROYS: AF
+gameng_current_scene_update::
+    ld a, [act_scene]
+    cp 0                            ;;escena del menú
+    jr nz, .comprobar_escena_game
+    call scene_menu_update
+    jr .exit
+
+    .comprobar_escena_game
+    cp 1
+    jr nz, .comprobar_escena_x
+    call scene_game_update
+    jr .exit
+
+    .comprobar_escena_x
+    .exit:
+ret
+
+
+;;-------------------------------------------------------
+;; Realiza los cambios de escena inicializando la escena a la que se vaya a transicionar
+;; DESTROYS: AF, [act_scene], [do_change]
+;; INPUT: [do_change]
+gameng_change_scene::
+    ;;Solo hará algo cuando [do_change] sea distinto de 0
+
+    ld a, [do_change]
+    cp 0
+    jp z, .exit
+
+    cp 1    ;;si [do_change] es 1
+    jr nz, .is_not_one
+    ld a, 0
+    ld [do_change], a
+    ld a, 1
+    ld [act_scene], a
+    call scene_menu_init
+    jr .exit
+
+    .is_not_one:
+    cp 2    ;;si [do_change] es 2
+    jr nz, .is_not_two
+    ld a, 0
+    ld [do_change], a
+    ld a, 2
+    ld [act_scene], a
+    call scene_game_init
+    jr .exit
+
+    .is_not_two
+    .exit:
+ret
+
+gameng_init::
+    call sys_render_setUp
+
+    ld a, 0
+    ld [act_scene], a   ;;inicializo [act_scene] a 0 (menu)
+    ld [do_change], a   ;;inicializo [do_change] a 0 (no cambiar a nada)
+ret
+
+gameng_run::
+    call scene_menu_init
+    .gameloop
+        call utils_read_buttons
+        call gameng_current_scene_update
+        call gameng_change_scene
+    jr .gameloop
 ret
     
