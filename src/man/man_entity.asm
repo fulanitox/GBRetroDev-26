@@ -23,6 +23,8 @@ SECTION "Entity Array", WRAM0
     player_score: DS 1
 
 
+SECTION "Entity Manager", ROM0
+
 ;;-------------------------------
 ;;ENTITY MANAGER-----------------
 ;;Struct player-------------------------------------------
@@ -67,7 +69,6 @@ position_spikes_right:
     DB $11*8+8, $0A*8+16
     DB $11*8+8, $0C*8+16
     DB $11*8+8, $0E*8+16
-SECTION "Entity Manager", ROM0
 ;;CODE
 
 ;;--------------------------------------------------------

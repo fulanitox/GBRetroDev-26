@@ -87,13 +87,14 @@ ret
 gameng_init::
     call sys_render_setUp
 
-    ld a, 0
+    ld a, 1
     ld [act_scene], a   ;;inicializo [act_scene] a 0 (menu)
+    ld a, 0
     ld [do_change], a   ;;inicializo [do_change] a 0 (no cambiar a nada)
 ret
 
 gameng_run::
-    call scene_menu_init
+    call scene_game_init
     .gameloop
         call utils_read_buttons
         call gameng_current_scene_update

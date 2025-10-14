@@ -57,73 +57,37 @@ sys_render_load_sprite:
         jr nz, .loop
 ret
 
-; Se llama con la pantalla apagada
-sys_render_load_all_sprites_VRAM:
-    ld hl, Protagonista
-    ld bc, ProtagonistaEnd - Protagonista
-    ld de, $8000
-    call sys_render_load_sprite
-ret
-sys_render_pintar_menu:
-    
-    ld hl, $FE00
-
-    ld a, 16
-    ld [hl+], a
-
-    ld a, 16
-    ld [hl+], a
-
-    ld a, $02
-    ld [hl+], a
-
-    ld a, %00000000
-    ld [hl+], a
-
-    ld a, 24
-    ld [hl+], a
-
-    ld a, 16
-    ld [hl+], a
-
-    ld a, $03
-    ld [hl+], a
-
-    ld a, %00000000
-    ld [hl+], a
-
-    ld a, 24
-    ld [hl+], a
-
-    ld a, 8
-    ld [hl+], a
-
-    ld a, $01
-    ld [hl+], a
-
-    ld a, %00000000
-    ld [hl+], a
-
-    ld a, 16
-    ld [hl+], a
-
-    ld a, 8
-    ld [hl+], a
-
-    ld a, $00
-    ld [hl+], a
-
-    ld a, %00000000
-    ld [hl+], a
-ret
 sys_render_setUp:
     call LCDCoff
 
     call sys_render_limpiar_pantalla
     call sys_render_ActivarSpritesYPaleta
     call sys_render_cleanOAM
-    
-    call sys_render_load_all_sprites_VRAM
 
     call LCDCon
+ret
+
+;;------------------------------------------------------
+;; Función que pinta cualquier escena que sea de 20x18
+;; INPUT: HL -> Direccion inicio pantalla ($9800 para arriba izquierda)
+;;        BC -> Direccion inicio timemap
+;; DESTROYS: AF, HL, DE, BC
+sys_render_drawTilemap20x18::
+    ld d, 18
+    .row
+        ld e, 20
+        .column
+            ld a, [bc]
+            ld [hl], a
+            inc hl
+            inc bc
+            dec e
+        jr nz, .column
+        
+        push bc
+        ld bc, 12
+        add hl, bc
+        pop bc
+        dec d
+    jr nz, .row
 ret
