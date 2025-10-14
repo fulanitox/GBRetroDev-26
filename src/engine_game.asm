@@ -9,7 +9,8 @@ SECTION "Actual scene", WRAM0
 
 
 SECTION "ENGINE GAME", ROM0
-engine_game_check_inputs:
+
+engine_game_check_inputs_scene_menu:
 
     call utils_read_buttons
 
@@ -22,6 +23,9 @@ engine_game_check_inputs:
         ld a, [flancoAscendente]
         bit 1, a
         jr z, .anyKey
+
+        ld a, 2
+        ld [do_change], a
 
     .anyKey
 
@@ -75,7 +79,7 @@ gameng_change_scene::
     jr nz, .is_not_two
     ld a, 0
     ld [do_change], a
-    ld a, 2
+    ld a, 1
     ld [act_scene], a
     call scene_game_init
     jr .exit
@@ -87,14 +91,14 @@ ret
 gameng_init::
     call sys_render_setUp
 
-    ld a, 1
-    ld [act_scene], a   ;;inicializo [act_scene] a 0 (menu)
     ld a, 0
+    ld [act_scene], a   ;;inicializo [act_scene] a 0 (menu)
     ld [do_change], a   ;;inicializo [do_change] a 0 (no cambiar a nada)
 ret
 
 gameng_run::
-    call scene_game_init
+    call scene_menu_init
+    ; call scene_game_initc
     .gameloop
         call utils_read_buttons
         call gameng_current_scene_update

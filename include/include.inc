@@ -20,3 +20,7 @@ DEF SPAWN_X = $09*8+8
 ;; SYS PHYSICS -------------------
 DEF MAX_SPEED_Y = 10
 DEF MAX_SPEED_X = 10
+
+;; SYS SPIKES --------------------
+DEF LENGHT_VECT_SPIKES = 7
+DEF MAX_SPIKES = 4

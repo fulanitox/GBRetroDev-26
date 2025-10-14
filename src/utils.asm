@@ -77,3 +77,34 @@ utils_read_buttons:
 
 ret
 
+
+SECTION "RANDOM_SIMPLE", WRAM0
+    rand_simple_seed: DS 1  ; 1 byte de semilla (se modificará)
+
+
+SECTION "RANDOM SIMPLE CODE", ROM0
+
+; --------------------------------------
+; Genera un número aleatorio del 0 al 7
+; INPUT: NADA
+; OUTPUT: A(numero del 0 al 7)
+; MODIFICA: A
+; --------------------------------------
+generate_random_7:
+    ld a, [rand_simple_seed]    ; cargar semilla act
+    add a, $17                  ; sumar const rara
+    xor $5C                     ; mezclar bits
+    rlca                        ; rotar a la izq
+    ld [rand_simple_seed], a    ; generar nueva semilla
+    and %00000111               ; 0-7
+    cp 7
+    jr nz, .onRange
+    sub 7
+    .onRange
+ret 
+
+init_random_7:
+    ld a, [$FF04]               ; leer el timer del sistema
+    xor a
+    ld [rand_simple_seed], a    
+ret
