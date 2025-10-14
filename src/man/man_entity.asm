@@ -30,11 +30,11 @@ SECTION "Entity Manager", ROM0
 ;;Struct player-------------------------------------------
 struct_player:
     DB PLAYER_TYPE
-    DB 0 ;OAM ID
-    DB SPAWN_Y ;PosX
-    DB SPAWN_X ;PosY
-    DB 0 ;PosX
-    DB 0 ;PosY
+    DB 1 ;OAM ID
+    DB SPAWN_Y ;PosY
+    DB SPAWN_X ;PosX
+    DB 0 ;
+    DB 0 ;
     DB SPRITE_PLAYER
     DB DEFAULT_ATR
     DB 0
@@ -43,10 +43,10 @@ struct_player:
 struct_spike:
     DB SPIKE_TYPE
     DB 0 ;OAM ID
-    DB 0 ;PosX
     DB 0 ;PosY
     DB 0 ;PosX
-    DB 0 ;PosY
+    DB 0 ;
+    DB 0 ;
     DB SPRITE_SPIKE
     DB DEFAULT_ATR
     DB 0
@@ -296,7 +296,7 @@ ret
 ;;-------------------------------------------------------
 ;; Crea en la primera posicion libre del entity_array, la entidad spike
 ;; WARNING: No lo coloca en la OAM, se debe hacer fuera
-;; INPUT: - B -> Indice de posicion (0-6)
+;; INPUT: - B -> Indice de posicion (7-1)
 ;; DESTROYS: AF, HL, BC, DE
 ;; OUTPUT: -HL -> posición de memoria de la entidad creada
 ;;
@@ -304,6 +304,10 @@ ret
 man_entity_create_spike_left::
     call man_entity_alloc
     dec hl
+
+    ld a,7
+    sub b
+    ld b,a              ;; b ahora esta de 0 a 6
 
     push hl
 
@@ -318,8 +322,35 @@ man_entity_create_spike_left::
         inc de
         dec c
         jr nz, .loop
-
-    dec hl
+    pop hl
+    ;;Coloco la posicion que le toque
+    push hl
+    ld hl, position_spikes_left
+    ld d, 0
+    ld a, b
+    ld e, a
+    add hl, de
+    push hl
+    pop de          ;;DE -> Position_spike_left Y
+    pop hl
+    push hl
+    inc hl
+    inc hl
+    inc hl              ;; hl -> Entity_PosY
+    push hl
+    ld h, d
+    ld l, e
+    ld a, [hl]
+    pop hl
+    ld [hl], a
+    inc hl              ;; hl -> Entity_PosX
+    inc de              ;; de -> Position_spike_left X
+    push hl
+    ld h, d
+    ld l, e
+    ld a, [hl]
+    pop hl
+    ld [hl], a
     pop hl
 ret
 
@@ -334,23 +365,116 @@ man_entity_create_spike_right::
     call man_entity_alloc
     dec hl
 
+    ld a,7
+    sub b
+    ld b,a              ;; b ahora esta de 0 a 6
+
     push hl
 
     inc hl
 
     ld de, struct_spike
 
-    ld b, SIZEOF_E - 1
+    ld c, SIZEOF_E - 1
     .loop
         ld a, [de]
         ld [hl+], a
         inc de
-        dec b
+        dec c
         jr nz, .loop
-
+    pop hl
+    ;;Coloco la posicion que le toque
+    push hl
+    ld hl, position_spikes_right
+    ld d, 0
+    ld a, b
+    ld e, a
+    add hl, de
+    push hl
+    pop de          ;;DE -> Position_spike_right Y
+    pop hl
+    push hl
+    inc hl
+    inc hl
+    inc hl              ;; hl -> Entity_PosY
+    push hl
+    ld h, d
+    ld l, e
+    ld a, [hl]
+    pop hl
+    ld [hl], a
+    inc hl              ;; hl -> Entity_PosX
+    inc de              ;; de -> Position_spike_right X
+    push hl
+    ld h, d
+    ld l, e
+    ld a, [hl]
+    pop hl
+    ld [hl], a
     pop hl
 ret
 
+;;-------------------------------------------------------
+;; Crea todas los pinchos contenidos en vector_spikes_left y en vector_spikes_right
+;; DESTROYS: AF, HL, BC, DE
+;;
+man_entity_create_spikes::
+    ld hl, vector_spikes_left
+    ld b, 7
+    .loop
+        ld a,[hl+]  ;;primer valor
+        cp 1
+        jr z, .leftSpikes
+        dec b
+    jr nz, .loop
+
+    .rightSpikes
+        ld hl, vector_spikes_right
+        ld b, 8
+        .loopR
+        dec b
+        jr z, .end
+        ld a, [hl+]
+        cp 1
+        jr nz, .loopR
+        ;;Hay pincho
+        push hl
+        push bc
+        call man_entity_create_spike_right          ;;hl -> direccion del pincho creado
+        push hl
+        call OAM_first_free_id
+        pop hl
+        inc hl
+        inc hl                                      ;;hl -> OAM_id
+        ld a, b
+        ld [hl], a                                  ;;EntityOAM_ID -> OAM_first_free_id
+        pop bc
+        pop hl
+
+    .leftSpikes
+        ld hl, vector_spikes_left
+        ld b, 8
+        .loopL
+        dec b
+        jr z, .end
+        ld a, [hl+]
+        cp 1
+        jr nz, .loopL
+        ;;Hay pincho
+        push hl
+        push bc
+        call man_entity_create_spike_left          ;;hl -> direccion del pincho creado
+        push hl
+        call OAM_first_free_id
+        pop hl
+        inc hl
+        inc hl                                      ;;hl -> OAM_id
+        ld a, b
+        ld [hl], a                                  ;;EntityOAM_ID -> OAM_first_free_id
+        pop bc
+        pop hl
+    .end
+ret
 ;;-------------------------------------------------------
 ;; Crea en la primera posicion libre del entity_array, la entidad spike
 ;; WARNING: No lo coloca en la OAM, se debe hacer fuera

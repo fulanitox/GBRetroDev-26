@@ -1,4 +1,5 @@
 include "../include/hardware.inc"
+include "../include/include.inc"
 SECTION "INPUT VARIABLES", HRAM
     estadoBotones:      DS 1
     flancoAscendente:   DS 1
@@ -107,4 +108,29 @@ init_random_7:
     ld a, [$FF04]               ; leer el timer del sistema
     xor a
     ld [rand_simple_seed], a    
+ret
+
+;; Recorre el entity array buscando un OAM_ID en 0, cuando lo encuentra returna el valor nuevo de OAM_ID
+;; WARNING: Entrega la primera OAM ID que sea 0, hay que cuidar que sea la del objeto que estamos creando
+;; llamando a este método justo tras crear el objeto
+;; MODIFIES: AF, B , DE, HL
+;; OUTPUT:
+;; - B -> id de la OAM libre
+;;
+OAM_first_free_id::
+    ld b, 0
+    ld hl, entity_array - SIZEOF_E
+    ld de, SIZEOF_E
+    .loop
+        inc b
+        add hl, de
+        ld a, [hl]
+        cp 1
+        jr nz, .loop
+        inc hl
+        inc hl
+        ld a, [hl-]
+        dec hl
+        cp 0
+        jr nz, .loop
 ret

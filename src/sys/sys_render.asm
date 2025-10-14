@@ -19,9 +19,9 @@ sys_render_limpiar_pantalla:
 ret
 
 sys_render_ActivarSpritesYPaleta:
-    ld a, [rLCDC]
-    or %00000010 
-    ld [rLCDC], a
+    ld a, [$FF40]
+    or %00000110
+    ld [$FF40], a
 
     ld a, %11100100
     ld [$FF48], a
