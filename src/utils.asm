@@ -106,7 +106,6 @@ ret
 
 init_random_7:
     ld a, [$FF04]               ; leer el timer del sistema
-    xor a
     ld [rand_simple_seed], a    
 ret
 
