@@ -278,18 +278,16 @@ ret
 ;; - HL -> dirección de una entidad válida del entity_sarray
 ;;
 man_entity_update_single::
-    ;;Actualizo el bucle de animación
-    ld a, SIZEOF_E - 1
-    .back
-        inc hl
-        dec a
-    jr nz, .back
-    ld a, [hl]      ;; a -> Entity_AnimID
-    inc a
-    cp ANIM_DUR
-    jr nz, .end
-        ld a, 0
-    .end
+    inc hl                  ;;Colocamos HL en Entity_Type
+    ld a, [hl]              ;;Guardamos el tipo en A
+    ld d, 0
+
+    cp 1                    ;;Si al restar A con 1 da 0 es un Player, sino es otra cosa (spike).
+    jp nz, .notPlayer
+
+    ld d, 1                 ;;Si es un player escribimos 1 en D para usarlo mas tarde en las animaciones
+    .notPlayer
+    call quesito
 ret
 
 
