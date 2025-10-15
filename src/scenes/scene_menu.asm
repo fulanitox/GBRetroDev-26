@@ -2,7 +2,6 @@ SECTION "Scene menu", ROM0
 
 
 scene_menu_init::
-    call wait_VBLANK
     call LCDCoff
     call scene_menu_load_all_sprites_VRAM
     call LCDCon
@@ -27,7 +26,6 @@ scene_menu_buttons:
 ret
 
 scene_menu_update::
-    call wait_VBLANK
     call scene_menu_buttons
 ret
 

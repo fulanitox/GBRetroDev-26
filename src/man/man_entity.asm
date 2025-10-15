@@ -85,6 +85,8 @@ man_entity_init:
         ld [hl+], a
         dec b
         jr nz, .loop
+    
+    call man_entity_create_player
 ret
 
 ;;-------------------------------------------------------

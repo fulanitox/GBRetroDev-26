@@ -7,10 +7,12 @@ scene_game_init::
     call scene_game_draw_background
     call LCDCon
 
+    call man_entity_init
+
     ; Inicializar la semilla de aleatorio
     call init_random_7
     ld hl, vector_spikes_left
-    call sys_spikes_generate
+    call sys_spikes_generate    
 ret
 
 scene_game_buttons: 
@@ -35,6 +37,7 @@ ret
 
 scene_game_update::
     call scene_game_buttons
+    call sys_render_update
 ret
 
 
