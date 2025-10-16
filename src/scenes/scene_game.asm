@@ -4,7 +4,7 @@ scene_game_init::
     call LCDCoff
     call sys_render_cleanOAM
     call scene_game_load_all_sprites_VRAM
-    call scene_game_draw_background
+    call scene_game_draw_background    
     call LCDCon
 
     call man_entity_init
@@ -13,6 +13,10 @@ scene_game_init::
     call init_random_7
     ld hl, vector_spikes_left
     call sys_spikes_generate    
+
+    ; Poner a 0 el score
+    ld a, 0
+    ld [player_score], a
 ret
 
 scene_game_buttons: 
@@ -23,7 +27,7 @@ scene_game_buttons:
 
         ld hl, vector_spikes_left
         call sys_spikes_generate
-
+        
     .checkA
         ld a, [flancoAscendente]
         bit 1, a
