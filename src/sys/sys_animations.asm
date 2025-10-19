@@ -1,27 +1,27 @@
 include "../include/include.inc"
 
 SECTION "Animations Data", WRAM0
-    next_animation:     DS 2
-    LastAnim:           DS 2
+                        ;     next_animation:     DS 2
+                        ;     LastAnim:           DS 2
 
-    DEF FinalDeAnim = -1
+                        ;     DEF FinalDeAnim = -1
 
-SECTION "Animations System", ROM0
-sprites:
-;ROB UP WALK
-    DB $10, $11, $12, $13, FinalDeAnim 
+                        SECTION "Animations System", ROM0
+                        ; sprites:
+                        ; ;ROB UP WALK
+                        ;     DB $10, $11, $12, $13, FinalDeAnim 
 
 
-;Inicializa las animaciones, poniendo a 0 la siguiente animacion 
-anim_init:
-    ld hl, sprites ;;HL -> Adress of fisrt byte of sprite
-    ld a, 0
-    ld [LastAnim], a     ;;Guarda el estado de la animación
-    ld a, l
-    ld [next_animation + 0], a   ;;Store L in the fisrt byte of anim_next    
-    ld a, h
-    ld [next_animation + 1], a   ;;Store H in the second byte of anim_next
-ret
+                        ; ;Inicializa las animaciones, poniendo a 0 la siguiente animacion 
+                        ; anim_init:
+                        ;     ld hl, sprites ;;HL -> Adress of fisrt byte of sprite
+                        ;     ld a, 0
+                        ;     ld [LastAnim], a     ;;Guarda el estado de la animación
+                        ;     ld a, l
+                        ;     ld [next_animation + 0], a   ;;Store L in the fisrt byte of anim_next    
+                        ;     ld a, h
+                        ;     ld [next_animation + 1], a   ;;Store H in the second byte of anim_next
+                        ; ret
 
 
 
@@ -91,10 +91,6 @@ quesito:
     ld [hl], a              ;;//Guardamos en HL el tile utilizando el registro A
 ret
 
-
-
-
-    
 
 
 restart_animation:
