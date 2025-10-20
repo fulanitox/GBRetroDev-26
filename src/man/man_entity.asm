@@ -34,13 +34,13 @@ struct_player:
     DB SPAWN_Y ;PosY
     DB SPAWN_X ;PosX
     DB 0 ;
-    DB 0 ;
+    DB 1 ;
     DB SPRITE_PLAYER
     DB DEFAULT_ATR
     DB 0
 
 ;;Struct spike-------------------------------------------
-struct_spike:
+struct_spike_r:
     DB SPIKE_TYPE
     DB 0 ;OAM ID
     DB 0 ;PosY
@@ -51,24 +51,35 @@ struct_spike:
     DB DEFAULT_ATR
     DB 0
 
+struct_spike_l:
+    DB SPIKE_TYPE
+    DB 0 ;OAM ID
+    DB 0 ;PosY
+    DB 0 ;PosX
+    DB 0 ;
+    DB 0 ;
+    DB SPRITE_SPIKE
+    DB %00100000
+    DB 0
+
 ;;Posiciones pinchos------------------------------------------------
 position_spikes_left:   
-    DB $01*8+8, $02*8+16
-    DB $01*8+8, $04*8+16
-    DB $01*8+8, $06*8+16
-    DB $01*8+8, $08*8+16
-    DB $01*8+8, $0A*8+16
-    DB $01*8+8, $0C*8+16
-    DB $01*8+8, $0E*8+16
+    DB $02*8+16, $01*8+8 
+    DB $04*8+16, $01*8+8
+    DB $06*8+16, $01*8+8
+    DB $08*8+16, $01*8+8
+    DB $0A*8+16, $01*8+8
+    DB $0C*8+16, $01*8+8
+    DB $0E*8+16, $01*8+8
 
 position_spikes_right:   
-    DB $11*8+8, $02*8+16
-    DB $11*8+8, $04*8+16
-    DB $11*8+8, $06*8+16
-    DB $11*8+8, $08*8+16
-    DB $11*8+8, $0A*8+16
-    DB $11*8+8, $0C*8+16
-    DB $11*8+8, $0E*8+16
+    DB $02*8+16, $11*8+8 
+    DB $04*8+16, $11*8+8
+    DB $06*8+16, $11*8+8
+    DB $08*8+16, $11*8+8
+    DB $0A*8+16, $11*8+8
+    DB $0C*8+16, $11*8+8
+    DB $0E*8+16, $11*8+8
 ;;CODE
 
 ;;--------------------------------------------------------
@@ -313,7 +324,7 @@ man_entity_create_spike_left::
 
     inc hl
 
-    ld de, struct_spike
+    ld de, struct_spike_l
 
     ld c, SIZEOF_E - 1
     .loop
@@ -328,6 +339,7 @@ man_entity_create_spike_left::
     ld hl, position_spikes_left
     ld d, 0
     ld a, b
+    sla a
     ld e, a
     add hl, de
     push hl
@@ -373,7 +385,7 @@ man_entity_create_spike_right::
 
     inc hl
 
-    ld de, struct_spike
+    ld de, struct_spike_r
 
     ld c, SIZEOF_E - 1
     .loop
@@ -388,6 +400,7 @@ man_entity_create_spike_right::
     ld hl, position_spikes_right
     ld d, 0
     ld a, b
+    sla a
     ld e, a
     add hl, de
     push hl
@@ -419,6 +432,7 @@ ret
 ;; DESTROYS: AF, HL, BC, DE
 ;;
 man_entity_create_spikes::
+    call man_entity_delete_spikes
     ld hl, vector_spikes_left
     ld b, 7
     .loop
@@ -450,6 +464,7 @@ man_entity_create_spikes::
         ld [hl], a                                  ;;EntityOAM_ID -> OAM_first_free_id
         pop bc
         pop hl
+        jr .loopR
 
     .leftSpikes
         ld hl, vector_spikes_left
@@ -473,7 +488,18 @@ man_entity_create_spikes::
         ld [hl], a                                  ;;EntityOAM_ID -> OAM_first_free_id
         pop bc
         pop hl
+        jr .loopL
+
     .end
+ret
+
+;;-------------------------------------------------------
+;; Elimina todos los pinchos entidades
+;;
+man_entity_delete_spikes:
+    ld de, man_entity_free
+    ld b, SPIKE_TYPE
+    call man_entity_for_each_by_type
 ret
 ;;-------------------------------------------------------
 ;; Crea en la primera posicion libre del entity_array, la entidad spike

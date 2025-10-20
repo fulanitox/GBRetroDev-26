@@ -1,36 +1,7 @@
  SECTION "Tiles", ROM0
 
 ; Start of tile array.
-Mapa::
-DB $FF,$FF,$FF,$FF,$00,$FF,$FF,$00
-DB $FF,$00,$FF,$00,$FF,$00,$FF,$00
-DB $FF,$00,$FF,$00,$FF,$00,$FF,$00
-DB $FF,$00,$00,$FF,$FF,$FF,$FF,$FF
-DB $FF,$FF,$FF,$FF,$03,$FF,$FB,$07
-DB $FB,$07,$FB,$07,$FB,$07,$FB,$07
-DB $FB,$07,$FB,$07,$FB,$07,$FB,$07
-DB $FB,$07,$3B,$C7,$BB,$C7,$BB,$C7
-DB $FB,$07,$FB,$07,$FB,$07,$FB,$07
-DB $FB,$07,$03,$FF,$FF,$FF,$FF,$FF
-DB $BB,$C7,$BB,$C7,$3B,$C7,$FB,$07
-DB $FB,$07,$FB,$07,$FB,$07,$FB,$07
-DB $DF,$E0,$DF,$E0,$DF,$E0,$DF,$E0
-DB $DF,$E0,$C0,$FF,$FF,$FF,$FF,$FF
-DB $DD,$E3,$DD,$E3,$DC,$E3,$DF,$E0
-DB $DF,$E0,$DF,$E0,$DF,$E0,$DF,$E0
-DB $FF,$FF,$FF,$FF,$C0,$FF,$DF,$E0
-DB $DF,$E0,$DF,$E0,$DF,$E0,$DF,$E0
-DB $DF,$E0,$DF,$E0,$DF,$E0,$DF,$E0
-DB $DF,$E0,$DC,$E3,$DD,$E3,$DD,$E3
-DB $BB,$C7,$BB,$C7,$BB,$C7,$BB,$C7
-DB $BB,$C7,$BB,$C7,$BB,$C7,$BB,$C7
-DB $DD,$E3,$DD,$E3,$DD,$E3,$DD,$E3
-DB $DD,$E3,$DD,$E3,$DD,$E3,$DD,$E3
-DB $00,$00,$00,$00,$00,$00,$00,$00
-DB $00,$00,$00,$00,$00,$00,$00,$00
-DB $FF,$00,$FF,$00,$FF,$00,$FF,$00
-DB $FF,$00,$FF,$00,$FF,$00,$FF,$00
-MapaEnd::
+
 
 tilemap_0::
 DB $0D,$0D,$0D,$0D

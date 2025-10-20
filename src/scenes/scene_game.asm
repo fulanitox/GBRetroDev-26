@@ -17,6 +17,10 @@ scene_game_init::
     ; Poner a 0 el score
     ld a, 0
     ld [player_score], a
+
+    ld a, 0
+    ld [idle_counter], a
+    ld [gravity], a
 ret
 
 scene_game_buttons: 
@@ -27,7 +31,8 @@ scene_game_buttons:
 
         ld hl, vector_spikes_left
         call sys_spikes_generate
-        
+        call man_entity_create_spikes
+
     .checkA
         ld a, [flancoAscendente]
         bit 1, a
@@ -35,12 +40,19 @@ scene_game_buttons:
 
         ld hl, vector_spikes_right
         call sys_spikes_generate
+        call man_entity_create_spikes
+
+        ld a, -4
+        call sys_physics_change_velocity
+        
     .anyKey
 
 ret
 
 scene_game_update::
     call scene_game_buttons
+    call sys_physics_update_gravity
+    call sys_physics_update
     call sys_render_update
 ret
 
