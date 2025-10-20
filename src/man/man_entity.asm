@@ -47,7 +47,7 @@ struct_spike_r:
     DB 0 ;PosX
     DB 0 ;
     DB 0 ;
-    DB SPRITE_SPIKE
+    DB SPRITE_SPIKE_R
     DB DEFAULT_ATR
     DB 0
 
@@ -58,8 +58,8 @@ struct_spike_l:
     DB 0 ;PosX
     DB 0 ;
     DB 0 ;
-    DB SPRITE_SPIKE
-    DB %00100000
+    DB SPRITE_SPIKE_L
+    DB DEFAULT_ATR
     DB 0
 
 ;;Posiciones pinchos------------------------------------------------

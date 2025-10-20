@@ -17,10 +17,6 @@ scene_game_init::
     ; Poner a 0 el score
     ld a, 0
     ld [player_score], a
-
-    ld a, 0
-    ld [idle_counter], a
-    ld [gravity], a
 ret
 
 scene_game_buttons: 
@@ -51,7 +47,6 @@ ret
 
 scene_game_update::
     call scene_game_buttons
-    call sys_physics_update_gravity
     call sys_physics_update
     call sys_render_update
 ret
