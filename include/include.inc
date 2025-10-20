@@ -13,7 +13,8 @@ DEF SPRITE_PLAYER = $10
 DEF SPRITE_SPIKE_R = $30
 DEF SPRITE_SPIKE_L = $50
 DEF DEFAULT_ATR = 0
-DEF ANIM_DUR = 5
+DEF ANIM_DUR_SPIKES = 5
+DEF ANIM_DUR_CORN = 5
 DEF SPAWN_Y = $07*8+16
 DEF SPAWN_X = $08*8+8
 
@@ -32,3 +33,9 @@ DEF MAX_SPEED_X = 10
 ;; SYS SPIKES --------------------
 DEF LENGHT_VECT_SPIKES = 7
 DEF MAX_SPIKES = 5
+
+;; COLLISION SYS -----------------
+DEF LIMIT_MIN_Y = 28    ;;Limite superior 16 + 16px margen de pantalla - 4px margen
+DEF LIMIT_MAX_Y =  128   ;;Límite inferior de la pantalla 128 + 4px margen (+16px pantalla -16px sprite)
+DEF LIMIT_MAX_X = 146   ;;Límite derecho de la pantalla 152px - 6px margen
+DEF LIMIT_MIN_X = 16     ;;Límite izquierdo de la pantalla 8px + 8px margen de pantalla 

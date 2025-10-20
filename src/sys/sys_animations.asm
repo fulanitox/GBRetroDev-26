@@ -33,7 +33,7 @@ sprites_corn:
     DB $10, $14, $18, $1C, $20, $1C, $18, $14 
 sprites_spike:
 ;ROB UP WALK
-    DB $10, $14, $18, $1C, $20, $1C, $18, $14 
+    DB $30, $34, $38, $3C, $30, $3C, $38, $34 
 
 ;;Actualizamos la entidad poneindo en su atributo de asprite el siguiente que le toca del pack de 4
 quesito:
@@ -52,16 +52,17 @@ quesito:
 
     ld a, d                 ;;//
     cp 1                    ;;\\Comprobamos si es un Player u otra cosa
-    jp z, .player           ;;//
+    jp nz, .player           ;;//
 
     ;;[PINCHO]================================
     ;;Aqui si es un pincho
     ld a, [hl]               ;;//Metemos en A el contador de animacion y le restamos uno para empezar a volver hacia el tile de la entidad
-    cp 5                     ;;\\Comprobamos que la animacion no haya terminado
+    cp ANIM_DUR_SPIKES                     ;;\\Comprobamos que la animacion no haya terminado
     call nc, restart_animation;;//Si ha terminado la mandamos a restart
 
     ld b, 0                 ;;//Iniciamos el contador para llegar hasta el proximo sprite
     ld de, sprites_spike    ;;\\
+    ld a, [hl]
     jp .loop                ;;//Usamos este salto para no hacer la animacion de otros sprites que no son de esta entidad
 
 
@@ -69,21 +70,26 @@ quesito:
     ;;Aqui si es un player
     .player
         ld a, [hl]               ;;//Metemos en A el contador de animacion y le restamos uno para empezar a volver hacia el tile de la entidad
-        cp 8                     ;;\\Comprobamos que la animacion no haya terminado
+        cp ANIM_DUR_CORN                     ;;\\Comprobamos que la animacion no haya terminado
         call nc, restart_animation;;//Si ha terminado la mandamos a restart
 
         ld b, 0                 ;;//Iniciamos el contador para llegar hasta el proximo sprite
         ld de, sprites_corn     ;;\\
+        ld a, [hl]
     ;;========================================
 
 
 
     .loop                   ;;//Bucle para llevar DE hasta la direccion de memoria del proximo sprite
-        cp b
-        inc de
-        inc b
-    jp nz, .loop
-    dec de                  ;;//Quitamos el +1 de overflow que puede ocurrir con el bucle
+    push hl
+    ld h, d
+    ld l, e
+    ld d, 0
+    ld e, a
+    add hl, de      
+    ld d, h
+    ld e, l
+    pop hl                  ;; DE= HL (posicion de los sprites) + a (iterador)
 
     dec hl                  ;;\\    
     dec hl                  ;;//LLevamos HL al tile de la entidad otra vez (Entity_Tile)
@@ -94,5 +100,6 @@ ret
 
 
 restart_animation:
-    ld hl, 0
+    ld a, 0
+    ld [hl], a
 ret

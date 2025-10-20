@@ -20,23 +20,10 @@ scene_game_init::
 ret
 
 scene_game_buttons: 
-    .checkB
-        ld a, [flancoAscendente]
-        bit 0, a
-        jr z, .checkA
-
-        ld hl, vector_spikes_left
-        call sys_spikes_generate
-        call man_entity_create_spikes
-
     .checkA
         ld a, [flancoAscendente]
         bit 1, a
         jr z, .anyKey
-
-        ld hl, vector_spikes_right
-        call sys_spikes_generate
-        call man_entity_create_spikes
 
         ld a, -4
         call sys_physics_change_velocity
@@ -46,9 +33,11 @@ scene_game_buttons:
 ret
 
 scene_game_update::
-    call scene_game_buttons
-    call sys_physics_update
     call sys_render_update
+    call scene_game_buttons
+    call sys_collision_update
+    call sys_physics_update
+    call man_entity_update
 ret
 
 
@@ -100,4 +89,25 @@ load_spikeLeft_sprites_VRAM:
     ld bc, FuegoLeft4End - FuegoLeft0
     ld de, $8500
     call sys_render_load_sprite
+ret
+
+
+scene_game_hit::
+    bit 7, a
+    jr nz, .negativo
+    .positivo
+    call man_entity_delete_spikes
+    ld hl, vector_spikes_right
+    call sys_spikes_generate
+    call man_entity_create_spikes
+    jr .score
+    .negativo
+    call man_entity_delete_spikes
+    ld hl, vector_spikes_left
+    call sys_spikes_generate
+    call man_entity_create_spikes
+    .score
+    ld a, [player_score]
+    inc a
+    ld [player_score], a
 ret
