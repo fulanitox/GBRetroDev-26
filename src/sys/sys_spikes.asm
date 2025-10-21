@@ -2,6 +2,7 @@ include "../include/include.inc"
 SECTION "VARIABLES SPIKES", WRAM0
     vector_spikes_left: DS 7
     vector_spikes_right: DS 7
+    max_spikes: DS 1
 
 SECTION "SYS SPIKES", ROM0
 
@@ -27,12 +28,12 @@ sys_spikes_generate:
     push hl
         call sys_spikes_clean_lr
     pop hl
-
-    ld e, MAX_SPIKES
+    
+    ld a, [max_spikes]
+    ld e, a
     ld b, h
     ld c, l
 
-    
     .spike
     call generate_random_7
         push bc
@@ -60,4 +61,42 @@ sys_spikes_generate:
         dec e
         jr nz, .spike
 
+ret
+
+sys_spikes_update_max:
+    ld hl, player_score
+    ld a, [hl]
+
+    ld hl, max_spikes
+
+    cp 10
+    jr nz, .check20
+    ld b, 2
+    ld [hl], b
+
+    .check20
+    cp 20
+    jr nz, .check30
+    ld b, 3
+    ld [hl], b
+
+    .check30
+    cp 30
+    jr nz, .check40
+    ld b, 4
+    ld [hl], b
+
+    .check40
+    cp 40
+    jr nz, .check50
+    ld b, 5
+    ld [hl], b
+
+    .check50
+    cp 50
+    jr nz, .ok
+    ld b, 6
+    ld [hl], b
+
+    .ok
 ret

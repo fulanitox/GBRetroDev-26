@@ -90,8 +90,7 @@ ret
 
 gameng_init::
     call sys_render_setUp
-    ld hl, vector_spikes_right
-    call sys_spikes_generate
+
 
     ld a, 0
     ld [act_scene], a   ;;inicializo [act_scene] a 0 (menu)

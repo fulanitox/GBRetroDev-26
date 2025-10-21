@@ -11,12 +11,15 @@ scene_game_init::
 
     ; Inicializar la semilla de aleatorio
     call init_random_7
-    ld hl, vector_spikes_left
-    call sys_spikes_generate    
+    ;; ld hl, vector_spikes_left
+    ;; call sys_spikes_generate    
 
     ; Poner a 0 el score
     ld a, 0
     ld [player_score], a
+    
+    ld a, 2
+    ld [max_spikes], a
 ret
 
 scene_game_buttons: 

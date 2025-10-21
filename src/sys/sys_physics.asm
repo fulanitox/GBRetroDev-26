@@ -79,6 +79,7 @@ ret
 sys_physics_update:
     call sys_physics_update_vertical
     call sys_physics_update_horizontal
+    
 ret
 
 ;; ------------------------------------------
