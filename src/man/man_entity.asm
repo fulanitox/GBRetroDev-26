@@ -62,17 +62,6 @@ struct_spike_l:
     DB DEFAULT_ATR
     DB 0
 
-struct_spike_l:
-    DB SPIKE_TYPE
-    DB 0 ;OAM ID
-    DB 0 ;PosY
-    DB 0 ;PosX
-    DB 0 ;
-    DB 0 ;
-    DB SPRITE_SPIKE
-    DB %00100000
-    DB 0
-
 ;;Posiciones pinchos------------------------------------------------
 position_spikes_left:   
     DB $02*8+16, $01*8+8 

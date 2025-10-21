@@ -2,10 +2,7 @@ include "../include/include.inc"
 
 SECTION "Physics section", WRAM0
     entity_acceleration: DS ENTITY_ARRAY_SIZE
-    idle_counter: DS 1
-    gravity: DS 1
-    speedY_sub: DS 1                                ; SubPixeles. Cuando haya carry aumenta velocidad.
-    speedY: DS 1                              
+    speedY_sub: DS 1                                ; SubPixeles. Cuando haya carry aumenta velocidad.                           
 
 SECTION "Physics System", ROM0
 
