@@ -57,6 +57,7 @@ sys_collision_check_player::
     ld de, sys_collision_check_entity
     ld b, SPIKE_TYPE
     call man_entity_for_each_by_type
+    .end
 ret
 
 ;; ---------------------------------------
@@ -106,6 +107,7 @@ sys_collision_check_entity::
     ld e, a                                 ;;e -> der bounding box spike - 16px (ancho spike) = izquierda BB spike
     pop af 
     add a, 8                                 ;;izq bounding box playter + 8px (ancho player) = Derecha BB player
+    cp e
     jr c, .end
     ;; HAY COLISION -------------------
     call scene_game_player_dead

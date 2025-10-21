@@ -2,6 +2,7 @@ include "../include/include.inc"
 SECTION "VARIABLES SPIKES", WRAM0
     vector_spikes_left: DS 7
     vector_spikes_right: DS 7
+    spikes_is_left: DS 1
     max_spikes: DS 1
 
 SECTION "SYS SPIKES", ROM0
@@ -99,4 +100,8 @@ sys_spikes_update_max:
     ld [hl], b
 
     .ok
+ret
+
+sys_spikes_update::
+    call sys_spikes_update_max
 ret

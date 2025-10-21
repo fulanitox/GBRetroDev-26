@@ -30,10 +30,13 @@ SECTION "Animations Data", WRAM0
 
 sprites_corn:
 ;ROB UP WALK
-    DB $10, $14, $18, $1C, $20, $1C, $18, $14 
-sprites_spike:
+    DB $20, $24, $28, $2C, $30, $2C, $28, $24 
+sprites_spike_r:
 ;ROB UP WALK
-    DB $30, $34, $38, $3C, $30, $3C, $38, $34 
+    DB $40, $44, $48, $4C, $40, $4C, $48, $44 
+sprites_spike_l:
+;ROB UP WALK
+    DB $60, $64, $68, $6C, $60, $6C, $68, $64 
 
 ;;Actualizamos la entidad poneindo en su atributo de asprite el siguiente que le toca del pack de 4
 quesito:
@@ -61,7 +64,14 @@ quesito:
     call nc, restart_animation;;//Si ha terminado la mandamos a restart
 
     ld b, 0                 ;;//Iniciamos el contador para llegar hasta el proximo sprite
-    ld de, sprites_spike    ;;\\
+    ld a, [spikes_is_left]
+    cp 1
+    jr z, .spikeLeft
+    ld de, sprites_spike_r
+    jr .end
+    .spikeLeft
+    ld de, sprites_spike_l    ;;\\
+    .end
     ld a, [hl]
     jp .loop                ;;//Usamos este salto para no hacer la animacion de otros sprites que no son de esta entidad
 

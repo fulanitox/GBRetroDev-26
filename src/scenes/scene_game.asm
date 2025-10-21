@@ -15,10 +15,10 @@ scene_game_init::
     ;; call sys_spikes_generate    
 
     ; Poner a 0 el score
-    ld a, 0
+    ld a, 9
     ld [player_score], a
     
-    ld a, 2
+    ld a, 1
     ld [max_spikes], a
 ret
 
@@ -41,6 +41,7 @@ scene_game_update::
     call sys_collision_update
     call sys_physics_update
     call man_entity_update
+    call sys_spikes_update
 ret
 
 
@@ -72,12 +73,16 @@ scene_game_hit::
     .positivo
     call man_entity_delete_spikes
     ld hl, vector_spikes_right
+    ld a, 0
+    ld [spikes_is_left], a
     call sys_spikes_generate
     call man_entity_create_spikes
     jr .score
     .negativo
     call man_entity_delete_spikes
     ld hl, vector_spikes_left
+    ld a, 1
+    ld [spikes_is_left], a
     call sys_spikes_generate
     call man_entity_create_spikes
     .score
@@ -88,5 +93,5 @@ ret
 
 scene_game_player_dead::
     ld a, 0
-    ld [player_score], a
+    ;;ld [player_score], a
 ret
