@@ -103,5 +103,40 @@ sys_spikes_update_max:
 ret
 
 sys_spikes_update::
+    ;;Muevo los sprites
+    ld a, [spikes_is_left]
+    cp 1
+    jr z, .is_Left
+    ld de, sys_spikes_update_pos_r
+    jr .next
+    .is_Left
+    ld de, sys_spikes_update_pos_l
+    .next
+    ld b, SPIKE_TYPE
+    call man_entity_for_each_by_type
     call sys_spikes_update_max
+ret
+
+sys_spikes_update_pos_r::
+    ld d, 0
+    ld e, ACCESS_POSX
+    add hl, de
+    ld a, [hl]
+    cp SPIKE_R_X
+    jr z, .end
+    dec a
+    ld [hl], a
+    .end
+ret
+
+sys_spikes_update_pos_l::
+    ld d, 0
+    ld e, ACCESS_POSX
+    add hl, de
+    ld a, [hl]
+    cp SPIKE_L_X
+    jr z, .end
+    inc a
+    ld [hl], a
+    .end
 ret
