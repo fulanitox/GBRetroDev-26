@@ -68,6 +68,12 @@ sys_spikes_update_max:
     ld hl, player_score
     ld a, [hl]
 
+    ld de, ACCESS_SPEEDX
+    ld hl, entity_array
+    add hl, de              ; Velocidad X
+    ld d, h
+    ld e, l
+
     ld hl, max_spikes
 
     cp 10
@@ -78,25 +84,31 @@ sys_spikes_update_max:
     .check20
     cp 20
     jr nz, .check30
-    ld b, 3
-    ld [hl], b
+    push af
+    ld a, []
+    
+    ld a, 2
+    ld [de], a
+    pop af
 
     .check30
     cp 30
     jr nz, .check40
-    ld b, 4
+    ld b, 3
     ld [hl], b
 
     .check40
     cp 40
     jr nz, .check50
-    ld b, 5
-    ld [hl], b
+    push af
+    ld a, 3
+    ld [de], a
+    pop af
 
     .check50
     cp 50
     jr nz, .ok
-    ld b, 6
+    ld b, 5
     ld [hl], b
 
     .ok
