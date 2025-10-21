@@ -455,3 +455,33 @@ sys_render_calculate_numbers::
     ld [hl], a
     pop af
 ret
+
+;; LOAD DE MIERDA DE ESCUTIA
+
+load_background_sprites_VRAM:
+    ld hl, Mapa
+    ld bc, MapaEnd - Mapa
+    ld de, $8000
+    call sys_render_load_sprite
+ret
+
+load_mazorca_sprites_VRAM:
+    ld hl, MazorcaFront
+    ld bc, MazorcaBackEnd - MazorcaFront
+    ld de, $8100
+    call sys_render_load_sprite
+ret
+
+load_spikeRight_sprites_VRAM:
+    ld hl, FuegoRight0
+    ld bc, FuegoRight4End - FuegoRight0
+    ld de, $8300
+    call sys_render_load_sprite
+ret
+
+load_spikeLeft_sprites_VRAM:
+    ld hl, FuegoLeft0
+    ld bc, FuegoLeft4End - FuegoLeft0
+    ld de, $8500
+    call sys_render_load_sprite
+ret

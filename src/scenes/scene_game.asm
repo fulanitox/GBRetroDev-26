@@ -66,35 +66,6 @@ scene_game_load_all_sprites_VRAM:
     call load_spikeLeft_sprites_VRAM
 ret
 
-load_background_sprites_VRAM:
-    ld hl, Mapa
-    ld bc, MapaEnd - Mapa
-    ld de, $8000
-    call sys_render_load_sprite
-ret
-
-load_mazorca_sprites_VRAM:
-    ld hl, MazorcaFront
-    ld bc, MazorcaBackEnd - MazorcaFront
-    ld de, $8100
-    call sys_render_load_sprite
-ret
-
-load_spikeRight_sprites_VRAM:
-    ld hl, FuegoRight0
-    ld bc, FuegoRight4End - FuegoRight0
-    ld de, $8300
-    call sys_render_load_sprite
-ret
-
-load_spikeLeft_sprites_VRAM:
-    ld hl, FuegoLeft0
-    ld bc, FuegoLeft4End - FuegoLeft0
-    ld de, $8500
-    call sys_render_load_sprite
-ret
-
-
 scene_game_hit::
     bit 7, a
     jr nz, .negativo
@@ -112,5 +83,10 @@ scene_game_hit::
     .score
     ld a, [player_score]
     inc a
+    ld [player_score], a
+ret
+
+scene_game_player_dead::
+    ld a, 0
     ld [player_score], a
 ret
