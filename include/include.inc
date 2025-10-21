@@ -29,6 +29,7 @@ DEF ACCESS_SPEEDX = 6
 ;; SYS PHYSICS -------------------
 DEF MAX_SPEED_Y = 10
 DEF MAX_SPEED_X = 10
+DEF MAX_GRAVITY = 4
 
 ;; SYS SPIKES --------------------
 DEF LENGHT_VECT_SPIKES = 7
