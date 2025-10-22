@@ -15,7 +15,7 @@ scene_game_init::
     ;; call sys_spikes_generate    
 
     ; Poner a 0 el score
-    ld a, 9
+    ld a, 0
     ld [player_score], a
     
     ld a, 1
@@ -93,5 +93,5 @@ ret
 
 scene_game_player_dead::
     ld a, 0
-    ;;ld [player_score], a
+    ld [player_score], a
 ret
