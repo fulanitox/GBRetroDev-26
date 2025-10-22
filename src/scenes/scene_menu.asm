@@ -4,7 +4,9 @@ SECTION "Scene menu", ROM0
 scene_menu_init::
     call LCDCoff
     call scene_menu_load_all_sprites_VRAM
+    call sys_render_cleanOAM
     call LCDCon
+    call scene_menu_save_high_score
 ret
 
 
@@ -40,5 +42,18 @@ scene_menu_load_all_sprites_VRAM:
 ret
 
 scene_menu_pintar_menu:
+    ld hl, $9800
+    ld bc, fondo
+    call sys_render_drawTilemap20x18
+ret
+
+scene_menu_save_high_score:
+    ld a, $0A
+    ld [$0000], a           ; Habilitar SRAM
     
+    ld a, [loaded_high_score]
+    ld [saved_high_score], a       ; Cargar el highScore
+
+    ld a, $00
+    ld [$0000], a          ; Deshabilitar SRAM
 ret

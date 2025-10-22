@@ -95,6 +95,20 @@ scene_game_hit::
 ret
 
 scene_game_player_dead::
+    call scene_game_check_high_score
     ld a, 0
     ld [player_score], a
+    ld a, 1
+    ld [do_change], a
+ret
+
+scene_game_check_high_score::
+    ld a, [player_score]
+    ld b, a
+    ld a, [loaded_high_score]
+    cp b
+    jr nc, .end
+    ld a, b
+    ld [loaded_high_score], a
+    .end
 ret

@@ -1,4 +1,5 @@
 SECTION "Actual scene", WRAM0
+    loaded_high_score: ds 1
     act_scene: DS 1 ;; 0 -> escena menú
                     ;; 1 -> escena gameplay
 
@@ -6,6 +7,9 @@ SECTION "Actual scene", WRAM0
                     ;;cuando sea 1 cambiará a la escena del menu
                     ;;cuando sea 2 cambiará a la escena del juego
 
+SECTION "SRAM Data", SRAM[$A000]
+   save_signature: ds 2
+   saved_high_score: ds 1
 
 
 SECTION "ENGINE GAME", ROM0
@@ -69,7 +73,7 @@ gameng_change_scene::
     jr nz, .is_not_one
     ld a, 0
     ld [do_change], a
-    ld a, 1
+    ld a, 0
     ld [act_scene], a
     call scene_menu_init
     jr .exit
@@ -90,7 +94,7 @@ ret
 
 gameng_init::
     call sys_render_setUp
-
+    call load_high_score
 
     ld a, 0
     ld [act_scene], a   ;;inicializo [act_scene] a 0 (menu)
@@ -105,5 +109,44 @@ gameng_run::
         call gameng_current_scene_update
         call gameng_change_scene
     jr .gameloop
+ret
+
+load_high_score::
+    ld a, $0A
+    ld [$0000], a           ; Habilitar SRAM
+    
+    ; Comprobar firma
+    ld hl, save_signature
+    ld a, [hl]
+    cp 'H'
+    jr nz, .noSave
+    inc hl
+    ld a, [hl]
+    cp 'S'
+    jr nz, .noSave
+
+    .LoadHighScore
+    ld a, [saved_high_score]
+    ld [loaded_high_score], a       ; Cargar el highScore
+    jr .end
+
+    .noSave
+    ; Si no hay firma válida, inicializar a 0
+    ld hl, saved_high_score
+    xor a
+    ld [hl], a
+    ; Guardar firma y valor inicial
+    ld hl, save_signature
+    ld a, 'H'
+    ld [hl+], a
+    ld a, 'S'
+    ld [hl], a
+
+    ld a, 0
+    ld [loaded_high_score], a
+
+    .end
+    ld a, $00
+    ld [$0000], a          ; Deshabilitar SRAM
 ret
     
