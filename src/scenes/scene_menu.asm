@@ -7,6 +7,14 @@ scene_menu_init::
     call sys_render_cleanOAM
     call LCDCon
     call scene_menu_save_high_score
+
+    Delay:
+    ld bc, $FFFF   ; duración (ajusta este valor)
+    .wait:
+        dec bc
+        ld a, b
+        or c
+        jr nz, .wait
 ret
 
 
