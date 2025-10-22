@@ -12,6 +12,9 @@ sprites_spike_r:
 sprites_spike_l:
     DB $60, $64, $68, $6C, $60, $6C, $68, $64 
 
+sprites_corn_dead:
+    DB $80, $84, $88, $8C, $90, $94, $98, $9C, $A0, $A4, $A8, $AC, $B0, $B4
+
 ;;Actualizamos la entidad poneindo en su atributo de asprite el siguiente que le toca del pack de 4
 quesito:
     inc hl                  ;;//

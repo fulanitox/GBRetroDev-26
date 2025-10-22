@@ -485,3 +485,10 @@ load_spikeLeft_sprites_VRAM:
     ld de, $8600
     call sys_render_load_sprite
 ret
+
+load_mazorcaDead_sprites_VRAM:
+    ld hl, MazorcaDead
+    ld bc, MazorcaDeadEnd - MazorcaDead
+    ld de, $8800
+    call sys_render_load_sprite
+ret
