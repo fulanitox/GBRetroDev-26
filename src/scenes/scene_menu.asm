@@ -32,11 +32,11 @@ ret
 
 ; Se llama con la pantalla apagada
 scene_menu_load_all_sprites_VRAM:
-    ld hl, Protagonista
-    ld bc, ProtagonistaEnd - Protagonista
-    ld de, $8000
-    call sys_render_load_sprite
-    call scene_menu_pintar_menu
+    ; ld hl, Protagonista
+    ; ld bc, ProtagonistaEnd - Protagonista
+    ; ld de, $8000
+    ; call sys_render_load_sprite
+    ; call scene_menu_pintar_menu
 ret
 
 scene_menu_pintar_menu:

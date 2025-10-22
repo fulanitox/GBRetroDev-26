@@ -467,7 +467,7 @@ ret
 
 load_mazorca_sprites_VRAM:
     ld hl, MazorcaFront
-    ld bc, MazorcaBackEnd - MazorcaFront
+    ld bc, MazorcaSide2FEnd - MazorcaFront
     ld de, $8200
     call sys_render_load_sprite
 ret

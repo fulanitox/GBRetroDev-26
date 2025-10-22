@@ -6,13 +6,10 @@ SECTION "Animations Data", WRAM0
 SECTION "Animations System", ROM0
 
 sprites_corn:
-;ROB UP WALK
-    DB $20, $24, $28, $2C, $30, $2C, $28, $24 
+    DB $20, $24, $28, $2C, $30, $3C, $38, $34 
 sprites_spike_r:
-;ROB UP WALK
     DB $40, $44, $48, $4C, $40, $4C, $48, $44 
 sprites_spike_l:
-;ROB UP WALK
     DB $60, $64, $68, $6C, $60, $6C, $68, $64 
 
 ;;Actualizamos la entidad poneindo en su atributo de asprite el siguiente que le toca del pack de 4
@@ -64,7 +61,7 @@ quesito:
         ld a, c
         jp nz, .endAnimation                      ;;\ Repite el bucle hasta que BC llegue a cero el contador
 
-        ld a, $08                   ;;/ RESET CONTADOR
+        ld a, $0A                   ;;/ RESET CONTADOR
         ld [animation_time], a      ;;\
 
 
