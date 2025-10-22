@@ -109,6 +109,16 @@ init_random_7:
     ld [rand_simple_seed], a    
 ret
 
+update_random_seed:
+    ld a, [rand_simple_seed]
+    ld b, a                  ; guardar semilla en B
+
+    ld a, [$FF04]            ; leer timer DIV
+    xor b                    ; mezclar con la semilla previa
+    rlca                     ; rotar bits
+    ld [rand_simple_seed], a ; guardar nueva semilla
+ret
+
 ;; Recorre el entity array buscando un OAM_ID en 0, cuando lo encuentra returna el valor nuevo de OAM_ID
 ;; WARNING: Entrega la primera OAM ID que sea 0, hay que cuidar que sea la del objeto que estamos creando
 ;; llamando a este método justo tras crear el objeto

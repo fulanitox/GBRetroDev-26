@@ -36,6 +36,9 @@ sys_spikes_generate:
     ld c, l
 
     .spike
+    push bc
+    call update_random_seed
+    pop bc
     call generate_random_7
         push bc
             ld b, 0
@@ -85,10 +88,17 @@ sys_spikes_update_max:
     cp 20
     jr nz, .check30
     push af
-    ld a, [de]
-    
+    ld a, [spikes_is_left]
+    cp 1                        ; Pinchos en la izquierda
+    jr z, .negativa
     ld a, 2
     ld [de], a
+    jr .end
+
+    .negativa
+    ld a, -2
+    ld [de], a
+    .end
     pop af
 
     .check30
@@ -101,14 +111,29 @@ sys_spikes_update_max:
     cp 40
     jr nz, .check50
     push af
+    ld a, [spikes_is_left]
+    cp 1                        ; Pinchos en la izquierda
+    jr z, .negativa40
     ld a, 3
     ld [de], a
+    jr .end40
+
+    .negativa40
+    ld a, -3
+    ld [de], a
+    .end40
     pop af
 
     .check50
     cp 50
-    jr nz, .ok
+    jr nz, .check60
     ld b, 5
+    ld [hl], b
+
+    .check60
+    cp 60
+    jr nz, .ok
+    ld b, 6
     ld [hl], b
 
     .ok

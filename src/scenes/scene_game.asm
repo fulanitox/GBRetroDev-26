@@ -31,7 +31,7 @@ scene_game_buttons:
         bit 1, a
         jr z, .anyKey
 
-        ld a, -4
+        ld a, -3
         call sys_physics_change_velocity
         
     .anyKey
