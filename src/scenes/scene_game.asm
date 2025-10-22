@@ -20,6 +20,9 @@ scene_game_init::
     
     ld a, 1
     ld [max_spikes], a
+
+    ld a, 1
+    ld [animation_time], a
 ret
 
 scene_game_buttons: 

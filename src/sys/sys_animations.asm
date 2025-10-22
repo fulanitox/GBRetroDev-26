@@ -1,32 +1,9 @@
 include "../include/include.inc"
 
 SECTION "Animations Data", WRAM0
-                        ;     next_animation:     DS 2
-                        ;     LastAnim:           DS 2
+    animation_time: DS 1 
 
-                        ;     DEF FinalDeAnim = -1
-
-                        SECTION "Animations System", ROM0
-                        ; sprites:
-                        ; ;ROB UP WALK
-                        ;     DB $10, $11, $12, $13, FinalDeAnim 
-
-
-                        ; ;Inicializa las animaciones, poniendo a 0 la siguiente animacion 
-                        ; anim_init:
-                        ;     ld hl, sprites ;;HL -> Adress of fisrt byte of sprite
-                        ;     ld a, 0
-                        ;     ld [LastAnim], a     ;;Guarda el estado de la animación
-                        ;     ld a, l
-                        ;     ld [next_animation + 0], a   ;;Store L in the fisrt byte of anim_next    
-                        ;     ld a, h
-                        ;     ld [next_animation + 1], a   ;;Store H in the second byte of anim_next
-                        ; ret
-
-
-
-
-
+SECTION "Animations System", ROM0
 
 sprites_corn:
 ;ROB UP WALK
@@ -49,7 +26,6 @@ quesito:
     inc hl
     inc hl
 
-    inc [hl]                ;;//Iteramos el contador de animacion
 
 
 
@@ -59,6 +35,7 @@ quesito:
 
     ;;[PINCHO]================================
     ;;Aqui si es un pincho
+    inc [hl]                ;;//Iteramos el contador de animacion
     ld a, [hl]               ;;//Metemos en A el contador de animacion y le restamos uno para empezar a volver hacia el tile de la entidad
     cp ANIM_DUR_SPIKES                     ;;\\Comprobamos que la animacion no haya terminado
     call nc, restart_animation;;//Si ha terminado la mandamos a restart
@@ -79,8 +56,21 @@ quesito:
     ;;[PLAYER]================================
     ;;Aqui si es un player
     .player
+        ld c, a
+
+        ld a, [animation_time]      ;;/ =6
+        dec a                       ;;\ Decrementa BC
+        ld [animation_time], a      ;;/
+        ld a, c
+        jp nz, .endAnimation                      ;;\ Repite el bucle hasta que BC llegue a cero el contador
+
+        ld a, $08                   ;;/ RESET CONTADOR
+        ld [animation_time], a      ;;\
+
+
+        inc [hl]                 ;;//Iteramos el contador de animacion
         ld a, [hl]               ;;//Metemos en A el contador de animacion y le restamos uno para empezar a volver hacia el tile de la entidad
-        cp ANIM_DUR_CORN                     ;;\\Comprobamos que la animacion no haya terminado
+        cp ANIM_DUR_CORN          ;;\\Comprobamos que la animacion no haya terminado
         call nc, restart_animation;;//Si ha terminado la mandamos a restart
 
         ld b, 0                 ;;//Iniciamos el contador para llegar hasta el proximo sprite
@@ -105,9 +95,9 @@ quesito:
     dec hl                  ;;//LLevamos HL al tile de la entidad otra vez (Entity_Tile)
     ld a, [de]
     ld [hl], a              ;;//Guardamos en HL el tile utilizando el registro A
+
+    .endAnimation
 ret
-
-
 
 restart_animation:
     ld a, 0

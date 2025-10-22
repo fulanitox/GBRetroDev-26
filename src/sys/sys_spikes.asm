@@ -85,7 +85,7 @@ sys_spikes_update_max:
     cp 20
     jr nz, .check30
     push af
-    ld a, []
+    ld a, [de]
     
     ld a, 2
     ld [de], a
