@@ -2,6 +2,7 @@ include "../include/include.inc"
 
 SECTION "Animations Data", WRAM0
     animation_time: DS 1 
+    animation_going: DS 1
 
 SECTION "Animations System", ROM0
 
@@ -30,8 +31,13 @@ quesito:
 
 
     ld a, d                 ;;//
-    cp 1                    ;;\\Comprobamos si es un Player u otra cosa
-    jp nz, .player           ;;//
+    cp DEAD_TYPE            ;;//
+    jp z, .playerDead      ;;\\Comprobamos si la entidad es un player muerto
+    
+    cp SPIKE_TYPE           ;;\\Comprobamos si es un Player u otra cosa
+    jp nz, .player          ;;//
+
+
 
     ;;[PINCHO]================================
     ;;Aqui si es un pincho
@@ -62,7 +68,7 @@ quesito:
         dec a                       ;;\ Decrementa BC
         ld [animation_time], a      ;;/
         ld a, c
-        jp nz, .endAnimation                      ;;\ Repite el bucle hasta que BC llegue a cero el contador
+        jp nz, .endAnimation        ;;\ Repite el bucle hasta que BC llegue a cero el contador
 
         ld a, $0A                   ;;/ RESET CONTADOR
         ld [animation_time], a      ;;\
@@ -76,8 +82,40 @@ quesito:
         ld b, 0                 ;;//Iniciamos el contador para llegar hasta el proximo sprite
         ld de, sprites_corn     ;;\\
         ld a, [hl]
+        jp .loop
     ;;========================================
 
+    .playerDead
+        ld c, a
+
+        ld a, [animation_time]      ;;/ =6
+        dec a                       ;;\ Decrementa BC
+        ld [animation_time], a      ;;/
+        ld a, c
+        jp nz, .endAnimation                      ;;\ Repite el bucle hasta que BC llegue a cero el contador
+
+        ld a, $0A                   ;;/ RESET CONTADOR
+        ld [animation_time], a      ;;\
+
+
+        inc [hl]                    ;;//Iteramos el contador de animacion
+        ld a, [hl]                  ;;//Metemos en A el contador de animacion y le restamos uno para empezar a volver hacia el tile de la entidad
+        cp ANIM_DUR_CORN_DEAD            ;;\\Comprobamos que la animacion no haya terminado
+        
+        ;;-------/////////////////--------------
+        jp c, .notFinished  ;;//Si ha terminado la mandamos a restart
+        ld a, 0
+        ld [animation_going], a
+        
+        ;;-------/////////////////--------------
+
+        .notFinished
+
+
+        ld b, 0                     ;;//Iniciamos el contador para llegar hasta el proximo sprite
+        ld de, sprites_corn_dead    ;;\\
+        ld a, [hl]
+    ;;========================================
 
 
     .loop                   ;;//Bucle para llevar DE hasta la direccion de memoria del proximo sprite

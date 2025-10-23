@@ -293,13 +293,31 @@ ret
 man_entity_update_single::
     inc hl                  ;;Colocamos HL en Entity_Type
     ld a, [hl]              ;;Guardamos el tipo en A
-    ld d, 0
 
-    cp 1                    ;;Si al restar A con 1 da 0 es un Player, sino es otra cosa (spike).
-    jp nz, .notPlayer
 
     ld d, 1                 ;;Si es un player escribimos 1 en D para usarlo mas tarde en las animaciones
-    .notPlayer
+
+
+    cp DEAD_TYPE            ;;//
+    jp z, .playerDead      ;;\\Comprobamos si la entidad es un player muerto
+
+    cp SPIKE_TYPE           ;;\\Comprobamos si es un Player u otra cosa
+    jp nz, .player          ;;//
+
+    
+
+    jp .vamos_con_el_quesillo
+
+    .player
+    ld d, 0
+    jp .vamos_con_el_quesillo
+
+    .playerDead
+    ld d, 2
+    jp .vamos_con_el_quesillo
+    
+
+    .vamos_con_el_quesillo
     call quesito
 ret
 

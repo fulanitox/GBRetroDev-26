@@ -1,3 +1,6 @@
+include "../include/include.inc"
+
+
 SECTION "Scene game", ROM0
 
 scene_game_init::
@@ -99,6 +102,37 @@ scene_game_player_dead::
     call scene_game_check_high_score
     ld a, 0
     ld [player_score], a
+
+    ld a, 1
+    ld [animation_going], a
+
+    ld hl, entity_array
+    inc hl
+
+    ld [hl], DEAD_TYPE      ;;Cargamos que la entidad es el cron muerto para la animacion
+    inc hl
+    inc hl                  ;;//
+    inc hl                  ;;\\LLevamos HL hasta el contador de animacion (Entity_AnimID)
+    inc hl                  ;;//
+    inc hl
+    inc hl
+    inc hl
+    inc hl
+
+    ld [hl], 0      ;;Reiniciamos el contador de la animacion
+
+    ; jp scene_game_update:
+    ;;Hay que hacer el call hacia qui desde el final de la animacion.
+
+    .loop
+        call sys_render_update
+        call man_entity_update
+        ld a, [animation_going]
+        cp 0
+    jr nz, .loop
+
+    dead_animation_finish:
+
     ld a, 1
     ld [do_change], a
 ret
