@@ -1,14 +1,18 @@
 include "../include/include.inc"
 
+include "../include/gbt_player.inc"
+
 
 SECTION "Scene game", ROM0
 
 scene_game_init::
     call LCDCoff
+    call gbt_stop
     call sys_render_cleanOAM
     call scene_game_load_all_sprites_VRAM
     call scene_game_draw_background    
     call LCDCon
+    call scene_game_load_song
 
     call man_entity_init
 
@@ -48,6 +52,7 @@ scene_game_update::
     call sys_physics_update
     call man_entity_update
     call sys_spikes_update
+    call gbt_update
 ret
 
 
@@ -146,4 +151,13 @@ scene_game_check_high_score::
     ld a, b
     ld [loaded_high_score], a
     .end
+ret
+
+
+
+scene_game_load_song:
+    ld de, cancion_data
+    ld bc, BANK(cancion_data)
+    ld a, $07
+    call gbt_play
 ret
