@@ -118,11 +118,11 @@ load_high_score::
     ; Comprobar firma
     ld hl, save_signature
     ld a, [hl]
-    cp 'H'
+    cp $48              ;; H
     jr nz, .noSave
     inc hl
     ld a, [hl]
-    cp 'S'
+    cp $53              ;; S
     jr nz, .noSave
 
     .LoadHighScore
@@ -137,9 +137,9 @@ load_high_score::
     ld [hl], a
     ; Guardar firma y valor inicial
     ld hl, save_signature
-    ld a, 'H'
+    ld a, $48           ;; H
     ld [hl+], a
-    ld a, 'S'
+    ld a, $53           ;; S
     ld [hl], a
 
     ld a, 0

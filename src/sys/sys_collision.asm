@@ -21,20 +21,43 @@ ret
 sys_collision_check_player::
     ld d, 0
     ld e, ACCESS_POSY
-    add hl, de              ;; Player posY
+    add hl, de              
     ;; LIMIT Y ---------------------------------
-    ;; Por ahora te devuelven a la y del spawn.
-    ld a, [hl]
-    ;;Hay como un desajuste de 2 px d lo q se ve y el dato asique lo arreglo
+    ld a, [hl]              ;; Player posY
+    dec a                   ;; Hay como un desajuste de 2 px d lo q se ve y el dato asique lo arreglo           
     dec a
-    dec a
-    cp LIMIT_MAX_Y 
-    jr nc, .limitY
-    cp LIMIT_MIN_Y 
-    jr c, .limitY
-    jr .axisX ;;Vamos a la x, en Y estamos bien
+    cp LIMIT_MAX_Y          ;; Limite inferior
+    jr c, .noLimitInf       ;; No toca limite inferior, comprobar superior
+
+    ;; Toca limite inferior
+    push af
+    push hl
+    push de
+    ld a, -4
+    call sys_physics_change_velocity
+    pop de
+    pop hl
+    pop af
+    jr .axisX
+
+    
+    .noLimitInf
+    cp LIMIT_MIN_Y          ;; Limite superior
+    jr nc, .axisX           ;; No toca limite superior, pasar a ejeX
+
+    ;; Toca limite superior
+    push af
+    push hl
+    push de
+    ld a, 4
+    call sys_physics_change_velocity
+    pop de
+    pop hl
+    pop af
+
     .limitY:
-    call scene_game_player_dead
+    ; call scene_game_player_dead
+    
     ;; LIMIT X ---------------------------------
     ;; Le da la vuelta a tu velocidad.
     .axisX:

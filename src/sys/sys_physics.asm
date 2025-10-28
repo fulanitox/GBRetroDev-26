@@ -167,10 +167,16 @@ sys_physics_update_horizontal:
     ld  [hl], a
 ret
 
-
+;------------------------------------------
+;; Rebote con límites. Pone velocidad a -3 o 3
+;; INPUT: NaN
+;; OUTPUT: NaN
+;; MODIFICA: A, B
+;------------------------------------------
+sys_physics_rebound: 
 
 
 ;; Tiempo sin pulsar un boton es la caida. Cada 10 se suma 1
 ;; MAL PORQUE VELY SE SUMA 1 CADA FRAME HASTA LO QUE TENGA Y GRAVEDAD 4 CADA FRAME POR EJEMPLO
 ;; ACELERACION AL SUBIR CON LA A 
-;; Que la gravedad no modifique posición sin oque pase por velocidad
+;; Que la gravedad no modifique posición sin oque pase por velocidad 
