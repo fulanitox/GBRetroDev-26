@@ -77,6 +77,7 @@ scene_game_load_all_sprites_VRAM:
     call load_spikeRight_sprites_VRAM
     call load_spikeLeft_sprites_VRAM
     call load_mazorcaDead_sprites_VRAM
+    call load_Fuente_VRAM
 ret
 
 scene_game_hit::

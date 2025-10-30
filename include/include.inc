@@ -51,3 +51,7 @@ DEF LIMIT_X_SPIKE = 0   ;; Lo que se le resta izq y derecha
 
 DEF LIMIT_Y_PLAYER = 4 ;; Lo que se le resta arriba y abajo
 DEF LIMIT_X_PLAYER = 4   ;; Lo que se le resta izq y derecha
+
+
+
+DEF TILE_SIZE               EQU $0300

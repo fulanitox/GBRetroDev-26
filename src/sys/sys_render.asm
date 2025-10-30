@@ -1,4 +1,5 @@
 include "../include/hardware.inc"
+include "../include/include.inc"
 
 SECTION "WRAM OAM", WRAM0, ALIGN[8]
     copiaOAM::
@@ -490,5 +491,12 @@ load_mazorcaDead_sprites_VRAM:
     ld hl, MazorcaDead
     ld bc, MazorcaDeadEnd - MazorcaDead
     ld de, $8800
+    call sys_render_load_sprite
+ret
+
+load_Fuente_VRAM:
+    ld hl, Fuente
+    ld bc, TILE_SIZE
+    ld de, $8C00
     call sys_render_load_sprite
 ret
