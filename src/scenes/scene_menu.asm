@@ -1,3 +1,6 @@
+include "../include/gbt_player.inc"
+
+    export cancion_menu_data
 SECTION "Scene menu", ROM0
 
 
@@ -5,11 +8,14 @@ scene_menu_init::
     call scene_menu_save_high_score
 
     call LCDCoff
+    call gbt_stop
     call scene_menu_load_all_sprites_VRAM
     call sys_render_cleanOAM
     call scene_menu_draw_press_a
     call scene_menu_draw_high_score
     call LCDCon
+    call scene_menu_load_song
+
 
     Delay:
     ld bc, $FFFF   ; duración (ajusta este valor)
@@ -40,6 +46,8 @@ ret
 
 scene_menu_update::
     call scene_menu_buttons
+    call wait_VBLANK
+    call gbt_update
 ret
 
 
@@ -158,3 +166,12 @@ scene_menu_draw_high_score:
 ret
 
 ;; para los numeros, ponerse en el 0 y sumar la cantidad
+
+scene_menu_load_song:
+    ld de, cancion_menu_data
+    ld bc, BANK(cancion_menu_data)
+    ld a, $07
+    call gbt_play
+    ld a, $01
+    call gbt_loop
+ret

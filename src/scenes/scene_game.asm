@@ -13,8 +13,6 @@ scene_game_init::
     call scene_game_load_all_sprites_VRAM
     call scene_game_draw_background    
     call LCDCon
-    call scene_game_load_song
-
     call man_entity_init
 
     ; Inicializar la semilla de aleatorio
@@ -48,7 +46,6 @@ ret
 
 scene_game_update::
     call sys_render_update
-    call gbt_update
     call scene_game_buttons
     call sys_collision_update
     call sys_physics_update
@@ -153,15 +150,4 @@ scene_game_check_high_score::
     ld a, b
     ld [loaded_high_score], a
     .end
-ret
-
-
-
-scene_game_load_song:
-    ld de, cancion_menu_data
-    ld bc, BANK(cancion_menu_data)
-    ld a, $07
-    call gbt_play
-    ld a, $01
-    call gbt_loop
 ret
