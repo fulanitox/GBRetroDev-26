@@ -2,6 +2,7 @@ include "../include/include.inc"
 
 include "../include/gbt_player.inc"
 
+    export cancion_menu_data
 
 SECTION "Scene game", ROM0
 
@@ -47,12 +48,12 @@ ret
 
 scene_game_update::
     call sys_render_update
+    call gbt_update
     call scene_game_buttons
     call sys_collision_update
     call sys_physics_update
     call man_entity_update
     call sys_spikes_update
-    call gbt_update
 ret
 
 
@@ -157,8 +158,10 @@ ret
 
 
 scene_game_load_song:
-    ld de, cancion_data
-    ld bc, BANK(cancion_data)
+    ld de, cancion_menu_data
+    ld bc, BANK(cancion_menu_data)
     ld a, $07
     call gbt_play
+    ld a, $01
+    call gbt_loop
 ret
