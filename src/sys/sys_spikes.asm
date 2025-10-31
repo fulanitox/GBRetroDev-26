@@ -80,13 +80,7 @@ sys_spikes_update_max:
     ld hl, max_spikes
 
     cp 10
-    jr nz, .check20
-    ld b, 2
-    ld [hl], b
-
-    .check20
-    cp 20
-    jr nz, .check30
+    jr nz, .check15
     push af
     ld a, [spikes_is_left]
     cp 1                        ; Pinchos en la izquierda
@@ -101,37 +95,50 @@ sys_spikes_update_max:
     .end
     pop af
 
-    .check30
-    cp 30
-    jr nz, .check40
+    .check15
+    cp 15
+    jr nz, .check25
+    ld b, 2
+    ld [hl], b
+    
+
+    .check25
+    cp 25
+    jr nz, .check35
     ld b, 3
     ld [hl], b
 
-    .check40
-    cp 40
-    jr nz, .check50
+    .check35
+    cp 35
+    jr nz, .check45
+    ld b, 4
+    ld [hl], b
+
+    .check45
+    cp 45
+    jr nz, .check55
     push af
     ld a, [spikes_is_left]
     cp 1                        ; Pinchos en la izquierda
-    jr z, .negativa40
+    jr z, .negativa45
     ld a, 3
     ld [de], a
-    jr .end40
+    jr .end45
 
-    .negativa40
+    .negativa45
     ld a, -3
     ld [de], a
-    .end40
+    .end45
     pop af
 
-    .check50
-    cp 50
-    jr nz, .check60
+    .check55
+    cp 55
+    jr nz, .check65
     ld b, 5
     ld [hl], b
-
-    .check60
-    cp 60
+    
+    .check65
+    cp 65
     jr nz, .ok
     ld b, 6
     ld [hl], b
