@@ -1,15 +1,14 @@
 
 ; File created by mod2gbt
 
-    SECTION "hit_sound_0", ROMX
-hit_sound_0:
-    DB  $87, $10, $00, $00, $00  ; más volumen inicial + tono más agudo
-    DB  $27, $00, $00, $00        ; decaimiento rápido
-    DB  $40, $00, $00, $00        ; ruido de alta frecuencia (pop brillante)
-    DB  $00, $00, $00, $00        ; fin
-    DB  $00, $00, $00, $00
-    DB  $00, $00, $00, $00
-    DB  $00, $00, $00, $00
+    SECTION "boing_0", ROMX
+boing_0:
+    DB  $98, $1F, $00, $00, $00
+    DB  $97, $0D, $00, $00, $00
+    DB  $9A, $0C, $00, $00, $00
+    DB  $98, $08, $00, $00, $00
+    DB  $24, $00, $00, $00
+    DB  $20, $00, $00, $00
     DB  $00, $00, $00, $00
     DB  $00, $00, $00, $00
     DB  $00, $00, $00, $00
@@ -69,10 +68,10 @@ hit_sound_0:
     DB  $00, $00, $00, $00
     DB  $00, $00, $00, $00
 
-  SECTION "hit_sound_data", ROMX
-hit_sound_data::
-    DB  BANK(hit_sound_0)
-    DW  hit_sound_0
+  SECTION "boing_data", ROMX
+boing_data::
+    DB  BANK(boing_0)
+    DW  boing_0
     DB  $00
     DW  $0000
 

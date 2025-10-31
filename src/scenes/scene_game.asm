@@ -2,7 +2,9 @@ include "../include/include.inc"
 
 include "../include/gbt_player.inc"
 
-    export cancion_menu_data
+    export flap_data
+    export boing_data
+    export dead_data
 
 SECTION "Scene game", ROM0
 
@@ -39,12 +41,12 @@ scene_game_buttons:
 
         ld a, -3
         call sys_physics_change_velocity
-        
     .anyKey
 
 ret
 
 scene_game_update::
+    call gbt_update
     call sys_render_update
     call scene_game_buttons
     call sys_collision_update
@@ -79,6 +81,9 @@ scene_game_load_all_sprites_VRAM:
 ret
 
 scene_game_hit::
+    push af
+    call scene_game_boing_sound
+    pop af
     bit 7, a
     jr nz, .negativo
     .positivo
@@ -100,6 +105,7 @@ scene_game_hit::
     ld a, [player_score]
     inc a
     ld [player_score], a
+    
 ret
 
 scene_game_player_dead::
@@ -127,10 +133,12 @@ scene_game_player_dead::
 
     ; jp scene_game_update:
     ;;Hay que hacer el call hacia qui desde el final de la animacion.
-
+    call gbt_stop
+    call scene_game_dead_sound
     .loop
         call sys_render_update
         call man_entity_update
+        call gbt_update
         ld a, [animation_going]
         cp 0
     jr nz, .loop
@@ -139,6 +147,14 @@ scene_game_player_dead::
 
     ld a, 1
     ld [do_change], a
+
+    ;;contador para que se vea la palomita
+    ld bc, $FFAA   ; duración (ajusta este valor)
+    .wait:
+        dec bc
+        ld a, b
+        or c
+        jr nz, .wait
 ret
 
 scene_game_check_high_score::
@@ -150,4 +166,25 @@ scene_game_check_high_score::
     ld a, b
     ld [loaded_high_score], a
     .end
+ret
+
+scene_game_flap_sound:
+    ld de, flap_data
+    ld bc, BANK(flap_data)
+    ld a, $07
+    call gbt_play
+ret
+
+scene_game_dead_sound:
+    ld de, dead_data
+    ld bc, BANK(dead_data)
+    ld a, $07
+    call gbt_play
+ret
+
+scene_game_boing_sound:
+    ld de, boing_data
+    ld bc, BANK(boing_data)
+    ld a, $07
+    call gbt_play
 ret
