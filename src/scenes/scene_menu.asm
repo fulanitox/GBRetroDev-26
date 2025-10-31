@@ -105,7 +105,7 @@ scene_menu_draw_press_a:
 ret
 scene_menu_draw_high_score:
     ld a, $C7   ; H
-    ld hl, $99C4
+    ld hl, $99C3
     ldi [hl], a
 
     ld a, $C8   ; I
@@ -136,6 +136,8 @@ scene_menu_draw_high_score:
     
     ld a, $E8   ; :
     ldi [hl], a
+
+    inc hl
 
     ;; NUMEROS
     ld a, [loaded_high_score]
