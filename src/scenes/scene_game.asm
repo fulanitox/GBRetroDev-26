@@ -110,8 +110,6 @@ ret
 
 scene_game_player_dead::
     call scene_game_check_high_score
-    ld a, 0
-    ld [player_score], a
 
     ld a, 1
     ld [animation_going], a
@@ -144,17 +142,31 @@ scene_game_player_dead::
     jr nz, .loop
 
     dead_animation_finish:
+    ld a, 0
+    ld [player_score], a
 
     ld a, 1
     ld [do_change], a
 
-    ;;contador para que se vea la palomita
-    ld bc, $FFAA   ; duración (ajusta este valor)
-    .wait:
-        dec bc
-        ld a, b
-        or c
-        jr nz, .wait
+    ld b, $FF
+    .loop1
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        nop
+        dec b
+    jr nz, .loop1    
 ret
 
 scene_game_check_high_score::
